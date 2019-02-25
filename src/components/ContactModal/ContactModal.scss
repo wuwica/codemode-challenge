@@ -1,0 +1,351 @@
+@import 'src/styles/responsive.scss';
+
+$pseudo-black: #273045;
+$pseudo-gray: #534b5b;
+$pseudo-white: #fff9eb;
+$outline-color: #419bf9;
+$error-color: #ff3b66;
+
+.ContactModal {
+  align-items: center;
+  background: white;
+  display: flex;
+  height: 100vh;
+  justify-content: center;
+  position: fixed;
+  width: 100vw;
+  z-index: 1;
+
+  @include breakpoint(mobile) {
+    .modal-contents {
+      height: 100%;
+      width: 100%;
+
+      .contents-container {
+        overflow: scroll;
+        padding: 0 24px 24px;
+
+        &.submitted {
+          justify-content: center;
+        }
+      }
+
+      .modal-exit {
+        font-size: 24px;
+        margin-bottom: 16px;
+        padding: 24px 24px 0 24px;
+      }
+
+      .modal-header {
+        min-height: fit-content;
+
+        .header-title {
+          font-size: 28px;
+          font-weight: 600;
+        }
+
+        .header-subtitle {
+          font-size: 14px;
+          margin-top: 8px;
+        }
+      }
+
+      .modal-form {
+        flex: 1;
+        flex-direction: column;
+        min-height: fit-content;
+
+        .small-input {
+          margin-bottom: 8px;
+          width: 100%;
+        }
+
+        .large-input {
+          width: 100%;
+        }
+
+        .description-input {
+          flex: 1;
+          min-height: 100px;
+        }
+
+        .form-controls {
+          display: flex;
+          flex-direction: column;
+          margin-top: 24px;
+          width: 100%;
+
+          .submit-button {
+            display: flex;
+            font-size: 14px;
+            justify-content: center;
+            margin-top: 12px;
+            padding: 16px 0;
+            width: 100%;
+          }
+        }
+      }
+    }
+  }
+
+  @include breakpoint(tablet) {
+    .modal-contents {
+      height: calc(100% - 72px);
+      min-height: fit-content;
+      padding: 36px;
+      width: calc(100% - 72px);
+
+      .contents-container {
+        justify-content: center;
+      }
+
+      .modal-exit {
+        font-size: 36px;
+        margin-bottom: 36px;
+      }
+
+      .modal-header {
+        .header-title {
+          font-size: 36px;
+          font-weight: 600;
+        }
+
+        .header-subtitle {
+          font-size: 18px;
+          margin-top: 8px;
+        }
+      }
+
+      .modal-form {
+        flex-wrap: wrap;
+        justify-content: space-between;
+
+        .small-input {
+          margin-bottom: 16px;
+          width: 49%;
+        }
+
+        .description-input {
+          height: 100px;
+        }
+
+        .form-controls {
+          align-items: center;
+          display: flex;
+          justify-content: space-between;
+          margin-top: 36px;
+          width: 100%;
+
+          .submit-button {
+            font-size: 14px;
+            padding: 16px 48px;
+          }
+        }
+      }
+    }
+  }
+
+  @include breakpoint(desktop) {
+    .modal-contents {
+      height: fit-content;
+      width: 800px;
+
+      .contents-container {
+        justify-content: center;
+      }
+
+      .modal-exit {
+        font-size: 24px;
+        margin-bottom: 36px;
+      }
+
+      .modal-header {
+        .header-title {
+          font-size: 36px;
+          font-weight: 600;
+        }
+
+        .header-subtitle {
+          font-size: 18px;
+          margin-top: 8px;
+        }
+      }
+
+      .modal-form {
+        flex-wrap: wrap;
+        justify-content: space-between;
+
+        .small-input {
+          margin-bottom: 16px;
+          width: 49%;
+        }
+
+        .description-input {
+          height: 100px;
+        }
+
+        .form-controls {
+          align-items: center;
+          display: flex;
+          justify-content: space-between;
+          margin-top: 36px;
+          width: 100%;
+
+          .submit-button {
+            font-size: 14px;
+            padding: 16px 48px;
+          }
+        }
+      }
+    }
+  }
+
+  input {
+    -webkit-appearance: none;
+  }
+
+  .modal-contents {
+    display: flex;
+    flex-direction: column;
+
+    .contents-container {
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+    }
+
+    .modal-exit {
+      align-self: flex-end;
+      cursor: pointer;
+    }
+
+    .modal-header {
+      align-items: center;
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 32px;
+
+      .header-title {
+        color: $pseudo-black;
+        text-align: center;
+      }
+
+      .header-subtitle {
+        color: $pseudo-gray;
+        text-align: center;
+      }
+    }
+
+    .modal-error {
+      color: $error-color;
+      font-size: 14px;
+      margin-bottom: 16px;
+      text-align: center;
+    }
+
+    .modal-form {
+      display: flex;
+
+      .small-input {
+        border: 1px solid $pseudo-gray;
+        box-sizing: border-box;
+        font-family: 'Roboto Condensed';
+        font-size: 14px;
+        height: 36px;
+        padding: 0 7px;
+
+        &.error {
+          border: 2px solid $error-color;
+          outline: 0;
+          padding: 6px;
+        }
+
+        &:focus {
+          border: 2px solid $outline-color;
+          outline: 0;
+          padding: 6px;
+        }
+
+        &::placeholder {
+          color: $pseudo-gray;
+        }
+      }
+
+      .large-input {
+        border: 1px solid $pseudo-gray;
+        box-sizing: border-box;
+        font-family: 'Roboto Condensed';
+        font-size: 14px;
+        padding: 7px;
+        width: 100%;
+
+        &.error {
+          border: 2px solid $error-color;
+          outline: 0;
+          padding: 6px;
+        }
+
+        &:focus {
+          border: 2px solid $outline-color;
+          outline: 0;
+          padding: 6px;
+        }
+
+        &::placeholder {
+          color: $pseudo-gray;
+        }
+      }
+
+      .form-controls {
+        display: flex;
+
+        .checkbox-group {
+          align-items: center;
+          display: flex;
+
+          .marketing-checkbox {
+            -webkit-appearance: none;
+
+            align-items: center;
+            background: white;
+            border: 1px solid $pseudo-black;
+            box-sizing: border-box;
+            cursor: pointer;
+            display: flex;
+            height: 24px;
+            justify-content: center;
+            margin: 0;
+            width: 24px;
+
+            &:focus {
+              border: 2px solid $outline-color;
+              outline: 0;
+            }
+
+            &:checked:after {
+              content: '\2714';
+              font-size: 16px;
+            }
+          }
+
+          .marketing-label {
+            cursor: pointer;
+            font-size: 16px;
+            margin-left: 8px;
+          }
+        }
+
+        .submit-button {
+          align-items: center;
+          background: black;
+          border: 0;
+          color: $pseudo-white;
+          cursor: pointer;
+          display: flex;
+          font-family: 'Roboto Condensed';
+          font-weight: 600;
+        }
+      }
+    }
+  }
+}
