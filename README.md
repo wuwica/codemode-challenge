@@ -1,3 +1,5 @@
+This project is a clone of the actual CodeMode website: https://www.codemode.co
+
 ## Setup
 
 Install `yarn` on your local machine: https://yarnpkg.com/lang/en/docs/install
