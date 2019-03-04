@@ -15,11 +15,13 @@ $error-color: #ff3b66;
   position: fixed;
   width: 100vw;
   z-index: 1;
+  transition: 300ms opacity;
 
   @include breakpoint(mobile) {
     .modal-contents {
       height: 100%;
       width: 100%;
+      transition: 300ms all;
 
       .contents-container {
         overflow: scroll;
@@ -82,6 +84,9 @@ $error-color: #ff3b66;
             margin-top: 12px;
             padding: 16px 0;
             width: 100%;
+          }
+          .submit-button.disabled {
+            background:grey;
           }
         }
       }
@@ -207,6 +212,7 @@ $error-color: #ff3b66;
   .modal-contents {
     display: flex;
     flex-direction: column;
+    transition: 300ms all;
 
     .contents-container {
       display: flex;
@@ -334,16 +340,113 @@ $error-color: #ff3b66;
             margin-left: 8px;
           }
         }
-
-        .submit-button {
-          align-items: center;
+        .submit-button-container{
+          position: relative;
           background: black;
-          border: 0;
-          color: $pseudo-white;
-          cursor: pointer;
-          display: flex;
-          font-family: 'Roboto Condensed';
-          font-weight: 600;
+
+          .submit-button {
+            align-items: center;
+            background: inherit;
+            border: 0;
+            color: $pseudo-white;
+            cursor: pointer;
+            display: flex;
+            font-family: 'Roboto Condensed';
+            font-weight: 600;
+            transition: 300ms all;
+          }
+          .submit-button.disabled {
+            cursor: default;
+            background:grey;
+            color:transparent;
+          }
+          @keyframes spinner {
+            to {transform: rotate(360deg);}
+          }
+          .spinner{
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 2px solid #ccc;
+            border-top-color: #333;
+            animation: spinner .6s linear infinite;;
+          }
+          @keyframes checkmark {
+            0% {
+              height: 0;
+              width: 0;
+              opacity: 1;
+            }
+            40% {
+              height: 0;
+              width: 10px;
+              opacity: 1;
+            }
+            100% { height: 32px; width: 10px; opacity: 1;}
+          }
+          .checkmark{
+            border-right: 5px solid white;
+            border-top: 5px solid white;
+            transform-origin: left top;  
+            transform: scaleX(-1) rotate(135deg);
+            opacity: 0;
+            animation: checkmark 250ms forwards;
+            animation-timing-function: ease;
+            animation-delay: .45s;
+          }
+          @keyframes spinner-wrapper-grow {
+            0% { opacity:0; transform: scale(.3); }
+            50% {opacity: 0.9; transform: scale(1.1); }
+            80% { transform: scale(0.89); }
+            100% { opacity: 1; transform: scale(1); }
+          }
+          @keyframes spinner-wrapper-shrink {
+            0% { opacity:1; transform: scale(1); }
+            20% { transform: scale(.89); }
+            50% { opacity: .9; transform: scale(1.1); }
+            100% { opacity: 0; transform: scale(.3); }
+          }
+          .checkmark-wrapper{
+            box-sizing: border-box;
+            position: absolute;
+            top: calc(50% + 5px);
+            left: calc(50% - 12px);
+            transform-origin: center;
+          }
+          .spinner-wrapper{
+            box-sizing: border-box;
+            position: absolute;
+            top: calc(50% - 18px);
+            left: calc(50% - 18px);
+            transform-origin: center;
+            &.loading{
+              animation: spinner-wrapper-grow .45s forwards;
+              transform: scale(1);
+              opacity: 1;
+            }
+            &.submitted{
+              animation: spinner-wrapper-shrink .45s forwards;
+              transform: scale(0);
+              opacity: 0;
+            }
+          }
+        }
+        @keyframes error {
+          0% { -webkit-transform: translate(10px); background:#ff446c; }
+          20% { -webkit-transform: translate(-10px);}
+          40% { -webkit-transform: translate(5px); background:#ff446c;}
+          60% { -webkit-transform: translate(-5px); }
+          80% { -webkit-transform: translate(3px); }
+          100% { -webkit-transform: translate(0px); background: black;}
+        }
+        .error-animation{
+          animation: error .6s;
+        }
+        .submitted-animation{
+          .submit-button.disabled {
+            transition-delay: .45s;
+            background: #5cb85c;
+          }
         }
       }
     }

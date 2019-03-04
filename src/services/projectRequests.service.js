@@ -12,9 +12,19 @@ const createProjectRequest = async ({ name, company, email, number, location, bu
     description: description,
     marketing_allowed: marketing,
   };
-  const response = await axios.post(constantsService.PROJECT_REQUESTS_URL, params);
-  return response.data;
+  const response = await timeoutTest(params)
+  //axios.post(constantsService.PROJECT_REQUESTS_URL, params);
+  return  response.data;
 }
+
+function timeoutTest(params) {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      resolve(params);
+    }, 5000);
+  });
+}
+
 
 export default {
   createProjectRequest,

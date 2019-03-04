@@ -21,15 +21,40 @@ import {
 import projectRequestsService from 'services/projectRequests.service';
 
 class ContactModal extends Component {
+  constructor(props) {
+    // Required step: always call the parent class' constructor
+    super(props);
+    this.state = {
+      submitState: "default",
+      opacity:0,
+      contentOpacity: 1
+    }
+  }
   render() {
     if (this.props.modalOpen) return this.renderModal();
     else return (null);
   }
+  
+  componentDidUpdate(prevProps) {
+    if (prevProps.modalOpen != this.props.modalOpen && this.props.modalOpen){
+      setTimeout(() => {
+        this.setState({
+          opacity:1
+        });
+      },0); //settimeout 0 so that the opacity isnt set parallel to the modal opening 
+    }else if (prevProps.submitted != this.props.submitted && this.props.submitted){
+      setTimeout(() => {
+        this.setState({
+          contentOpacity:1
+        });
+      },0); 
+    }
+  }
 
   renderModal() {
     return (
-      <div className="ContactModal">
-        <div className="modal-contents">
+      <div className="ContactModal" style={{opacity:this.state.opacity}}>
+        <div className="modal-contents" style={{opacity:this.state.contentOpacity}}>
           <div className="modal-exit" onClick={this.closeContactModal.bind(this)}>&#x2715;</div>
           { this.renderContentsContainer() }
         </div>
@@ -67,6 +92,39 @@ class ContactModal extends Component {
         All fields are mandatory.
       </div>
     );
+  }
+  
+  renderSubmit(){ //submit button has 4 different states
+    if(this.state.submitState === "loading"){
+      return(
+        <div className={"submit-button-container"}>
+          <input disabled type="submit" className={"submit-button disabled"} value="SUBMIT" onClick={null} />
+          <div className={"spinner-wrapper loading"}><div className={"spinner"}></div></div>
+        </div>);
+    }else if(this.state.submitState === "submitted"){
+      return(
+        <div className={"submit-button-container submitted-animation"}>
+          <input disabled type="submit" className={"submit-button disabled"} value="SUBMIT" onClick={null} />
+          <div className={"spinner-wrapper submitted"}>
+            <div className={"spinner"}></div>
+          </div>
+          <div className={"checkmark-wrapper"}>
+            <div className={"checkmark"}></div>
+          </div>
+        </div>);
+    }else if(this.state.submitState === "error"){ 
+      return(
+        <div className={"submit-button-container error-animation"} onAnimationEnd={(event) => {this.setState({submitState: "default"})}} >
+          <input type="submit" className="submit-button" value="SUBMIT"onClick={this.submit.bind(this)} />
+        </div>
+      );
+    }else{
+      return(
+        <div className={"submit-button-container"}>
+          <input type="submit" className="submit-button" value="SUBMIT"onClick={this.submit.bind(this)} />
+        </div>
+      );
+    }
   }
 
   renderForm() {
@@ -124,17 +182,16 @@ class ContactModal extends Component {
               onChange={this.setMarketing.bind(this)} />
             <label className="marketing-label" htmlFor="marketing">Sign me up for the latest news.</label>
           </div>
-          <input
-            type="submit"
-            className="submit-button"
-            value="SUBMIT"
-            onClick={this.submit.bind(this)} />
+          {this.renderSubmit()}
         </div>
       </form>
     );
   }
 
   submit(event) {
+    this.setState({
+      submitState: "loading"
+    });
     event.preventDefault();
     if (this.validateInputs()) {
       projectRequestsService.createProjectRequest({
@@ -147,17 +204,40 @@ class ContactModal extends Component {
         description: this.props.description,
         marketing: this.props.marketing,
       }).then(() => {
-        this.props.setSubmitted();
-        this.props.clearForm();
+        setTimeout(() => {
+          this.setState({
+            submitState: "submitted"
+          },() => {
+            setTimeout (()=>{
+              this.setState({
+                contentOpacity:0
+              },() => {
+                setTimeout (()=>{
+                  this.props.setSubmitted();
+                  this.props.clearForm();
+                  this.setState({
+                    submitState: "default"
+                  });
+                },300) // 300ms to fade content out
+              }); 
+            },1000); // 1s after the checkmark animation starts to play
+          });
+        },0);
       }).catch((error) => {
         if (error && error.response && error.response.status === 422) {
           alert('Your email is invalid. Please use a valid email.');
         } else {
           alert('Something went wrong. Please try again later.');
         }
+        this.setState({
+          submitState: "error"
+        });
       });
     } else {
       this.props.setError();
+      this.setState({
+        submitState: "error"
+      });
     }
   }
 
@@ -211,9 +291,17 @@ class ContactModal extends Component {
   }
 
   closeContactModal() {
-    this.props.clearError();
-    this.props.clearSubmitted();
-    this.props.closeContactModal();
+    setTimeout(() => {
+      this.setState({
+        opacity:0
+      },() => {
+        setTimeout (()=>{
+          this.props.clearError();
+          this.props.clearSubmitted();
+          this.props.closeContactModal();
+        },300) //300ms to fade the entire modal out
+      });
+    },0);
   }
 }
 
